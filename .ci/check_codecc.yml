@@ -1,0 +1,28 @@
+version: v2.0
+
+name: "check_codecc"
+
+
+stages:
+
+  - name: "stage2-自主配置规则集"
+    jobs:
+      job_2:
+        steps:
+          - checkout: self
+            with:
+              enableGitLfs: false
+          - uses: CodeCCCheckAtom@1.*
+            name: Coverity腾讯代码分析
+            with:
+                beAutoLang: false # 不自动检测项目语言
+                checkerSetType: "normal" # 规则集类型，normal对应自主配置规则集，openScan对应按开源治理要求配置，epcScan对应按PCG EPC要求配置。选了openScan或epcScan则不需要填写后面的内容
+                toolScanType: "0" # 扫描方式。0是全量扫描，1是快速全量扫描
+                languages: # 工程语言, 必选, 可取值："C_CPP", "JAVA", "C_SHARP", "JS", "OC", "PYTHON", "PHP", "RUBY", "GOLANG", "SWIFT", "TYPESCRIPT", "KOTLIN", "LUA", "OTHERS"
+                - "C_CPP"
+                script: "cd ${WORKSPACE} \n make clean \n make"
+                languageRuleSetMap: # 规则集, 必选, 需要按照语言来进行填写
+                    C_CPP_RULE:
+                        - "codecc_default_cpp"
+                customPath: # 黑名单。设置后不扫描黑名单中路径，例如.*/tirdParty/.*
+                    - ".*/js/vue/.*"
