@@ -26,3 +26,4 @@ stages:
                         - "codecc_default_cpp"
                 customPath: # 黑名单。设置后不扫描黑名单中路径，例如.*/tirdParty/.*
                     - ".*/js/vue/.*"
+                    
